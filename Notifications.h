@@ -16,7 +16,7 @@ namespace w5
     {
 
     }
-    // - copy constructor
+    // - copy constructor 
     Notifications(const Notifications& no)
     {
       for (int i = 0; i < no.containers.size(); i++)
