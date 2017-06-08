@@ -21,6 +21,15 @@ w5::Notifications collect(std::ifstream& in, char recDelim) {
 }
 
 int main(int argc, char* argv[]) {
+
+	delete[] argv;
+
+	argc = 2;
+
+	argv[0] = "w5";
+	argv[1] = "test.dat";
+
+
   if (argc == 1) {
     std::cerr << argv[0] << ": missing file operand\n";
     return 1;
@@ -42,4 +51,6 @@ int main(int argc, char* argv[]) {
 
   std::cout << "Press any key to continue ... ";
   std::cin.get();
+
+	delete[] argv;
 }

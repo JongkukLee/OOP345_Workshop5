@@ -54,5 +54,27 @@ namespace w5
         os << "Reply : " << this->reply << std::endl;
       os << "Tweet : " << this->message << std::endl;
     }
+	// set member fields (user, reply, message)
+	void set(std::string username, std::string replyname, std::string msg)
+	{
+		this->user = username;
+		this->reply = replyname;
+		this->message = msg;
+	}
+	// return user name
+	const std::string getUser()
+	{
+		return this->user;
+	}
+	// return reply name
+	const std::string getReply()
+	{
+		return this->reply;
+	}
+	// return message
+	const std::string getMessage()
+	{
+		return this->reply;
+	}
   };
 }
