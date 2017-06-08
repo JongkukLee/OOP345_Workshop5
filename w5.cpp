@@ -52,5 +52,17 @@ int main(int argc, char* argv[]) {
   std::cout << "Press any key to continue ... ";
   std::cin.get();
 
+
+
+	w5::Notifications n1(notifications);
+	w5::Notifications n2(std::move(n1));
+
+	n1 = std::move(n2);
+	n2 = std::move(n1);
+	n1 = std::move(n2);
+	n2 = std::move(n1);
+
+	n1 = n2;
+
 	delete[] argv;
 }

@@ -8,59 +8,87 @@ namespace w5
 {
   class Notifications
   {
-    std::vector<Message*> containers;
+    //std::vector<Message*> containers;
+
+		Message* messgaeTable;
+		        size_t count;
+		static int maxSize;
+
 
   public:
+
+		void dump(std::string label)
+		{
+
+			std::cout << label;
+			std::cout << ",count=" << count;
+			std::cout << ",messgaeTable=" << messgaeTable << std::endl;
+		}
+
     // - default constructor - empty
     Notifications()
+			: messgaeTable(new Message[maxSize]), count(0)
     {
-
+			dump("ctor this");
     }
     // - copy constructor 
     Notifications(const Notifications& no)
+			: messgaeTable(nullptr), count(0)
     {
-      for (int i = 0; i < no.containers.size(); i++)
-      {
-        this->containers.push_back(new Message());
-				this->containers.at(i)->set(no.containers.at(i)->getUser(), 
-				no.containers.at(i)->getReply(), 
-				no.containers.at(i)->getMessage());
-      }
+			dump("cp ctor this");
+			//no.dump("cp ctor no");
+
+			count = no.count;
+			for (size_t i = 0; i < count; i++)
+			{
+				messgaeTable[i] = no.messgaeTable[i];
+			}
     }
     // -copy assignment operator
     Notifications& operator=(const Notifications& no)
     {
+			dump("cp ctor this");
+			//no.dump("cp ctor no");
       if (this != &no)
       {
-				// dealocate memory
-				for (int i = 0; i < this->containers.size(); i++)
-					delete this->containers.at(i);
-
-				// deep copy
-        for (int i = 0; i < no.containers.size(); i++)
-          this->containers.push_back(no.containers.at(i));
+				delete[] messgaeTable;
+				messgaeTable = new Message[maxSize];
+				count = no.count;
+				for (size_t i = 0; i < count; i++)
+				{
+					messgaeTable[i] = no.messgaeTable[i];
+				}
       }
+			return *this;
     }
     // - move constructor
     Notifications(Notifications&& no)
+			: messgaeTable(no.messgaeTable), count(no.count)
     {
-			for (int i = 0; i < no.containers.size(); i++)
-			{
-				this->containers.push_back(no.containers.at(i));
-				no.containers.at(i) = nullptr;
-			}
+			dump("move ctor this");
+			no.dump("move ctor no");
+			no.messgaeTable = nullptr; // make no a 'zombie'
+			no.count = 0;
 		}
     // -move assignment operator
     Notifications&& operator=(Notifications&& no)
     {
-      if (this != &no)
-      {
-				for (int i = 0; i < no.containers.size(); i++)
-				{
-					this->containers.push_back(no.containers.at(i));
-					no.containers.at(i) = nullptr;
-				}
-      }
+			dump("move ctor this");
+			no.dump("move ctor no");
+			if (this != &no)
+			{
+				delete[] messgaeTable;
+				messgaeTable = nullptr; // make no a 'zombie'
+				count = no.count;
+
+				messgaeTable = messgaeTable;
+				count = no.count;
+
+				no.messgaeTable = nullptr; // make no a 'zombie'
+				no.count = 0;
+			}
+			
+			return std::move(*this);
     }
     // - destructor
     ~Notifications()
@@ -70,16 +98,17 @@ namespace w5
     // - adds msg to the set
     void operator+=(const Message& msg)
     {
-			//this->containers.push_back(&msg);
-			this->containers.push_back(new Message());
+			this->messgaeTable[count] = msg;
+			count++;
     }
     // - inserts the Message objects to the os output stream
     void display(std::ostream& os) const
     {
-			for (int i = 0; i < this->containers.size(); i++)
+			for (int i = 0; i < count; i++)
 			{
-				this->containers.at(i)->display(os);
+				messgaeTable[i].display(os);
 			}
     }
   };
+	int Notifications::maxSize = 10;
 }
