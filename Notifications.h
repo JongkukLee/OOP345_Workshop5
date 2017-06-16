@@ -1,8 +1,23 @@
-#pragma once
+// OOP345 Workshop 5: Containers 
+// File Notifications.h
+// Version 1.0
+// Date 2017-06-16
+// Author Jongkuk Lee ( jlee465@myseneca.ca, 127730158 )
+// Description
+//      declaration and implementation of variables and 
+//            funtion prototype for Notifications Class  
+//
+// Revision History
+///////////////////////////////////////////////////////////
+// Name     Date    Reason
+//
+///////////////////////////////////////////////////////////
+#ifndef NOTIFICATIONS_H
+#define NOTIFICATIONS_H
 #include <iostream>
 #include <vector>
-
-class Message;
+#include "Message.h"
+//class Message;
 
 namespace w5
 {
@@ -14,12 +29,10 @@ namespace w5
 		        size_t count;
 		static int maxSize;
 
-
   public:
 
 		void dump(std::string label)
 		{
-
 			std::cout << label;
 			std::cout << ",count=" << count;
 			std::cout << ",messgaeTable=" << messgaeTable << std::endl;
@@ -29,15 +42,12 @@ namespace w5
     Notifications()
 			: messgaeTable(new Message[maxSize]), count(0)
     {
-			dump("ctor this");
+
     }
     // - copy constructor 
     Notifications(const Notifications& no)
 			: messgaeTable(nullptr), count(0)
     {
-			dump("cp ctor this");
-			//no.dump("cp ctor no");
-
 			count = no.count;
 			for (size_t i = 0; i < count; i++)
 			{
@@ -47,8 +57,6 @@ namespace w5
     // -copy assignment operator
     Notifications& operator=(const Notifications& no)
     {
-			dump("cp ctor this");
-			//no.dump("cp ctor no");
       if (this != &no)
       {
 				delete[] messgaeTable;
@@ -65,16 +73,12 @@ namespace w5
     Notifications(Notifications&& no)
 			: messgaeTable(no.messgaeTable), count(no.count)
     {
-			dump("move ctor this");
-			no.dump("move ctor no");
 			no.messgaeTable = nullptr; // make no a 'zombie'
 			no.count = 0;
 		}
     // -move assignment operator
     Notifications&& operator=(Notifications&& no)
     {
-			dump("move ctor this");
-			no.dump("move ctor no");
 			if (this != &no)
 			{
 				delete[] messgaeTable;
@@ -98,8 +102,8 @@ namespace w5
     // - adds msg to the set
     void operator+=(const Message& msg)
     {
-			this->messgaeTable[count] = msg;
-			count++;
+		this->messgaeTable[count] = msg;
+		count++;
     }
     // - inserts the Message objects to the os output stream
     void display(std::ostream& os) const
@@ -112,3 +116,4 @@ namespace w5
   };
 	int Notifications::maxSize = 10;
 }
+#endif

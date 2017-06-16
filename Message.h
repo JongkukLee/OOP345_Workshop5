@@ -1,6 +1,26 @@
-#pragma once
+// OOP345 Workshop 5: Containers 
+// File Message.h
+// Version 1.0
+// Date 2017-06-16
+// Author Jongkuk Lee ( jlee465@myseneca.ca, 127730158 )
+// Description
+//      declaration and implementation of variables and 
+//            funtion prototype for Message Class  
+//
+// Revision History
+///////////////////////////////////////////////////////////
+// Name     Date    Reason
+//
+///////////////////////////////////////////////////////////
+#ifndef MESSAGE_H
+#define MESSAGE_H
+
 #include <iostream>
+#include <fstream>
 #include <string>
+#include <iomanip>
+
+const bool VERBOSE = false;
 
 namespace w5
 {
@@ -26,20 +46,21 @@ public:
 		auto cr = line.find('\r');
 		if (cr != std::string::npos)
 			line.erase(cr);
-
-		std::cout << "line ->" << line << "<-\n";
+		if(VERBOSE) std::cout << "line ->" << line << "<-\n";
 
 		this->user = line.substr(0, line.find(' '));
-		std::cout << "user ->" << user << "<-\n";
-		
-		line = line.substr(line.find(' ')+1);
-		std::cout << "line2 ->" << line << "<-\n";
+		if (VERBOSE) std::cout << "user ->" << user << "<-\n";
 
-		if (line.size() != 0)
+		// if user length and remained text size is same,
+		// do not set reply and tweet
+		if (user.size() != line.size())
 		{
+			line = line.substr(line.find(' ') + 1);
+
 			// check if existing reply
 			std::size_t idx = line.find("@");
-			// if not existing, the remained text is message. 
+
+			// if reply is not existing, the remained text is tweet 
 			if (idx == std::string::npos)
 			{
 				this->reply = "";
@@ -51,8 +72,14 @@ public:
 				this->tweet = line.substr(line.find(' ') + 1);
 			}
 		}
-		std::cout << "reply ->" << reply << "<-\n";
-		std::cout << "tweet ->" << tweet << "<-\n";
+		else
+		{
+			this->reply = "";
+			this->tweet = "";
+		}
+
+		if (VERBOSE) std::cout << "reply ->" << reply << "<-\n";
+		if (VERBOSE) std::cout << "tweet ->" << tweet << "<-\n";
 
 	}
 	// - returns true if the object is in a safe empty state
@@ -64,10 +91,10 @@ public:
 	void display(std::ostream& os) const
 	{
 		os << "Message" << std::endl;
-		os << "User : " << this->user << std::endl;
+		os << " User  : " << this->user << std::endl;
 		if (this->reply.size() != 0)
-			os << "Reply : " << this->reply << std::endl;
-		os << "Tweet : " << this->tweet << std::endl;
+			os << " Reply : " << this->reply << std::endl;
+		os << " Tweet : " << this->tweet << std::endl << std::endl;
 	}
 	// set member fields (user, reply, message)
 	void set(std::string useruser, std::string replyuser, std::string msg)
@@ -91,3 +118,4 @@ public:
 	}
 };
 }
+#endif
